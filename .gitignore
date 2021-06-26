@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# tweet_collector
+output/
+config/
+
 # Distribution / packaging
 .Python
 build/
