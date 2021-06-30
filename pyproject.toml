@@ -7,10 +7,13 @@ authors = ["parisa-zahedi <p.zahedi@uu.nl>","roos-voorvaart <r.voorvaart@uu.nl>"
 [tool.poetry.dependencies]
 python = "^3.8"
 pandas = "^1.2.4"
-pathlib = "^1.0.1"
 requests = "^2.25.1"
 requests-oauthlib = "^1.3.0"
 argparse = "^1.4.0"
+searchtweets-v2 = "^1.1.0"
+python-dateutil = "^2.8.1"
+PyYAML = "^5.4.1"
+
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
