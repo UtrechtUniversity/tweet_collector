@@ -9,6 +9,8 @@ __pycache__/
 # tweet_collector
 output/
 config/
+.DS_Store
+*/.DS_Store
 
 # Distribution / packaging
 .Python
