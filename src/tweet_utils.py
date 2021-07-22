@@ -17,20 +17,44 @@ def save_chunk(argstuple):
     indx = argstuple[2]
     filename_prefix = filename_prefix+'_'+str(indx)
 
-    # Save as <filename_prefix>.csv
+    # Save all chunks as .json
     lst = []
-    with open(filename_prefix, 'a', encoding='utf-8') as f:
+    with open(filename_prefix + '.json', 'a', encoding='utf-8') as f:
         for ch in chunk:
             json.dump(ch, f)
             f.write('\n')
             lst.append(ch)
-    df = pd.DataFrame(lst)
-    df.to_csv(filename_prefix + '.csv', index=False)
 
-    # Save as <filename_prefix>.json
-    with open(filename_prefix + '.json', 'w', encoding='utf-8') as fp:
-        for ch in chunk:
-            json.dump(ch, fp)
+    # Save all chunks as .csv
+    df = pd.DataFrame(lst)
+    df.to_csv(filename_prefix + '.csv', index=False, sep=';')
+
+    # Unpack data dictionaries
+    df_data = pd.DataFrame(lst[0]['data'])
+    for col in df_data.columns:
+        if type(df_data[col][0]) == dict:
+            df_data = pd.concat(
+                [df_data.drop([col], axis=1), df_data[col].apply(pd.Series)], axis=1)
+
+    # Extract all extensions
+    try:
+        df_incl = pd.DataFrame()
+        for incl in lst[0]['includes']:
+            if df_incl.empty:
+                df_incl = pd.DataFrame(lst[0]['includes'][incl])
+            else:
+                df_incl = df_incl.join(pd.DataFrame(lst[0]['includes'][incl]))
+            if 'id' in df_incl.columns:
+                df_incl = df_incl.rename(columns={'id': f'{incl}_id'})
+    except KeyError:
+        pass
+
+    # Merge data and extensions together in one csv file
+    try:
+        df = df_data.join(df_incl)
+    except NameError:
+        df = df_data
+    df.to_csv(filename_prefix + '_cleaned.csv', index=False, sep=';')
 
     print('Status Update based on {}'.format(filename_prefix))
 
