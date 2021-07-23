@@ -1,6 +1,7 @@
 import pandas as pd
 from multiprocessing import Pool
 import json
+from pathlib import Path
 
 
 def chunks(lst, n):
@@ -17,6 +18,11 @@ def save_chunk(argstuple):
     indx = argstuple[2]
     filename_prefix = filename_prefix+'_'+str(indx)
 
+    # Check if filename_prefix contains folder + create it if necessary
+    if Path(filename_prefix).parent != Path():
+        folder = Path(filename_prefix).parent
+        folder.mkdir(parents=True, exist_ok=True)
+
     # Save all chunks as .json
     lst = []
     with open(filename_prefix + '.json', 'a', encoding='utf-8') as f:
@@ -29,12 +35,26 @@ def save_chunk(argstuple):
     df = pd.DataFrame(lst)
     df.to_csv(filename_prefix + '.csv', index=False, sep=';')
 
+    # Clean output
+    clean_output(filename_prefix, lst)
+
+    print('Status Update based on {}'.format(filename_prefix))
+
+
+def clean_output(filename_prefix, lst):
+    '''
+    Clean csv file: one row per tweet, no dictionaries
+    '''
     # Unpack data dictionaries
-    df_data = pd.DataFrame(lst[0]['data'])
-    for col in df_data.columns:
-        if type(df_data[col][0]) == dict:
-            df_data = pd.concat(
-                [df_data.drop([col], axis=1), df_data[col].apply(pd.Series)], axis=1)
+    try:
+        df_data = pd.DataFrame(lst[0]['data'])
+        for col in df_data.columns:
+            if type(df_data[col][0]) == dict:
+                df_data = pd.concat(
+                    [df_data.drop([col], axis=1), df_data[col].apply(pd.Series)], axis=1)
+        df = df_data
+    except KeyError:
+        pass
 
     # Extract all extensions
     try:
@@ -46,17 +66,15 @@ def save_chunk(argstuple):
                 df_incl = df_incl.join(pd.DataFrame(lst[0]['includes'][incl]))
             if 'id' in df_incl.columns:
                 df_incl = df_incl.rename(columns={'id': f'{incl}_id'})
+        df_data = df_data.join(df_incl)
     except KeyError:
         pass
 
     # Merge data and extensions together in one csv file
     try:
-        df = df_data.join(df_incl)
+        df_data.to_csv(filename_prefix + '_cleaned.csv', index=False, sep=';')
     except NameError:
-        df = df_data
-    df.to_csv(filename_prefix + '_cleaned.csv', index=False, sep=';')
-
-    print('Status Update based on {}'.format(filename_prefix))
+        pass
 
 
 def save_list(chunklist, filename_prefix):
