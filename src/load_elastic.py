@@ -13,13 +13,14 @@ def document_generator(fp):
     with open(fp, "r") as f:
         for line in f:
             doc = json.loads(line)
+            print(doc)
             yield {
                 "_index": "twitter",
                 "_type": "tweet",
                 # "_index": index_name,
                 # "_type": type_name,
 
-                "_id": doc["id"],
+                #"_id": doc["id"],
 
                 # load the document into elastic
                 #  for a subset, use somethng like
@@ -39,7 +40,7 @@ def load_data_elasticsearch(es, fp, mapping_fp, verbose=False):
             mapping = f.read()
 
         # es.indices.create(index='twitter', ignore=400, body=mapping)
-        es.indices.create(index=index_name, ignore=400, body=mapping)
+        es.indices.create(index='twitter', ignore=400, body=mapping)
 
     n, _ = bulk(es, document_generator(fp))
     print("Loaded {} tweets into Elasticsearch".format(n))
@@ -54,7 +55,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Load lookup file into ElasticSearch.'
     )
-    parser.add_argument('input_fp', type=str, help='source file')
+    parser.add_argument('--input_fp', type=str, help='source file')
     parser.add_argument('--mapping_fp',
                         type=str,
                         default= os.path.join("config", "mapping_twitter_tweet.json"),
