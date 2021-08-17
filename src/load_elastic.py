@@ -2,21 +2,36 @@
 
 import argparse
 import json
-import os
-
+import re
+from pathlib import Path
+from glob import glob
 from elasticsearch import Elasticsearch, RequestsHttpConnection
 from elasticsearch.helpers import bulk
 
 
 def document_generator(fp):
     """JSON lines doc generator."""
-    with open(fp, "r") as f:
-        for line in f:
-            doc = json.loads(line)
-            yield {
-                "_index": "twitter",
-                "_source": doc
-            }
+    if re.match('.*_[0-9].json', str(fp)):
+        print(f'Load {Path(fp).name}...')
+        with open(fp, "r") as f:
+            for line in f:
+                doc = json.loads(line)
+                yield {
+                    "_index": "twitter",
+                    "_source": doc
+                }
+    else:
+        print(f'Load all files named {Path(fp).stem}_x{Path(fp).suffix}...')
+        files = list(Path(fp).parent.glob(
+            f'{Path(fp).stem}*{Path(fp).suffix}'))
+        for file in files:
+            with open(file, "r") as f:
+                for line in f:
+                    doc = json.loads(line)
+                    yield {
+                        "_index": "twitter",
+                        "_source": doc
+                    }
 
 
 def load_data_elasticsearch(es, fp, mapping_fp, verbose=False):
@@ -47,8 +62,7 @@ if __name__ == '__main__':
     parser.add_argument('input_fp', type=str, help='source file')
     parser.add_argument('--mapping_fp',
                         type=str,
-                        default=os.path.join(
-                            "config", "mapping_twitter_tweet.json"),
+                        default=Path("config", "mapping_twitter_tweet.json"),
                         help='map file')
     args = parser.parse_args()
 
