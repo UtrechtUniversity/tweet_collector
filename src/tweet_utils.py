@@ -80,7 +80,6 @@ def clean_output(filename_prefix, lst):
 def save_list(chunklist, filename_prefix):
 
     argslist = ((chk, filename_prefix, i) for i, chk in enumerate(chunklist))
-    print(argslist)
     pool = Pool(2)  # run 2 task at most in parallel
     pool.map(save_chunk, argslist)
     print('Done')
