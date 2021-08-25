@@ -34,8 +34,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 This project provides a set of guidelines + tool, to facilitate the process of collecting tweets and analysing them.
-- To collect tweets, we apply ['searchtweets-v2'](https://pypi.org/project/searchtweets-v2/), a python package serves as a wrapper for the all Twitter API v2 search endpoints.
-- The collected tweets are visualized in [Kibana](https://www.elastic.co/kibana/).
 
 ### Project description
 Twitter forms a rich source of information for researchers interested in studying 'the public conversation'. 
@@ -45,8 +43,8 @@ This project is aimed to guide researchers with limited level of programming ski
 
 ### Built With
 
-- [searchtweets-v2](https://pypi.org/project/searchtweets-v2/)
-- [elasticsearch/kibana](https://www.elastic.co/)
+- [searchtweets-v2](https://pypi.org/project/searchtweets-v2/): It is a python package serves as a wrapper for the all Twitter API v2 search endpoints. We use this package to collect tweets.
+- [elasticsearch/kibana](https://www.elastic.co/) : The collected tweets are visualized using elasticsearch and kibana.
 - docker
 
 <!-- GETTING STARTED -->
@@ -57,7 +55,7 @@ The followings are the main steps.
 3. Search tweets
 4. Visualize tweets.
 
-Each step is elaborted in details in 'guideline' folder.
+Each step is elaborted in details in **guideline** folder.
 
 To get a local copy up and running follow these simple steps.
 
