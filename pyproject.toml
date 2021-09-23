@@ -14,6 +14,7 @@ searchtweets-v2 = "^1.1.0"
 python-dateutil = "^2.8.1"
 PyYAML = "^5.4.1"
 elasticsearch = "^7.14.0"
+ipykernel = "^6.4.1"
 
 
 [tool.poetry.dev-dependencies]
