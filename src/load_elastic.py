@@ -4,7 +4,6 @@ import argparse
 import json
 import re
 from pathlib import Path
-from glob import glob
 from elasticsearch import Elasticsearch, RequestsHttpConnection
 from elasticsearch.helpers import bulk
 
@@ -46,7 +45,7 @@ def load_data_elasticsearch(es, fp, mapping_fp, verbose=False):
         es.indices.create(index='twitter', ignore=400, body=mapping)
 
     n, _ = bulk(es, document_generator(fp))
-    print("Loaded {} tweets into Elasticsearch".format(n))
+    print("Loaded {} files of tweet data into Elasticsearch".format(n))
 
     if verbose:
         print("The mapping of twitter:")
@@ -56,12 +55,12 @@ def load_data_elasticsearch(es, fp, mapping_fp, verbose=False):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
-        description='Load lookup file into ElasticSearch.'
+        description='Load tweet file into ElasticSearch.'
     )
     parser.add_argument('--input_fp', type=str, help='source file')
     parser.add_argument('--mapping_fp',
                         type=str,
-                        default=Path("config", "mapping_twitter_tweet.json"),
+                        default= "mapping_twitter_tweet.json",
                         help='map file')
     args = parser.parse_args()
 
