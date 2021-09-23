@@ -2,6 +2,7 @@ import argparse
 import sys
 from os import environ
 from tweet_utils import *
+from time import sleep
 
 # https://github.com/twitterdev/search-tweets-python/tree/v2
 # https://pypi.org/project/searchtweets-v2/#description
@@ -50,7 +51,7 @@ def main():
     filename_prefix = configfile_dict.get("filename_prefix") \
         if configfile_dict.get("filename_prefix") is not None else 'tweets'
     results_per_file = int(configfile_dict.get("results_per_file")) \
-        if configfile_dict.get("results_per_file") is not None else 1000
+        if configfile_dict.get("results_per_file") is not None else 10000
 
     # check credentials : first environmental variables are checked
     bearer_token = environ["SEARCHTWEETS_BEARER_TOKEN"] if environ.get(
@@ -80,14 +81,43 @@ def main():
 
     # Generate parameters for Twitter API and call it
     stream_params = gen_params_from_config(config_dict)
-    rs = ResultStream(tweetify=False, **stream_params)
+    rs = ResultStream(tweetify=True, **stream_params)
     stream = rs.stream()
 
-    # makes chunks of tweets and save them in separate files, in parallel
-    tweet_list = [tweet for tweet in stream]
-    chunklist = list(chunks(tweet_list, results_per_file))
-    save_list(chunklist, filename_prefix)
+    # Collect data objects including tweet, media, place and user, if they are requested by the user.
+    # After 3 requests, it sleeps 1 second.
+    tweets_include = {}
+    tweets_data = []
+    cnt = 0
+    for tweet in stream:
+        cnt += 1
+        try:
+            # tweet object is saved in 'data'
+            tweets_data = tweets_data + tweet['data']
+            if 'includes' in tweet:
+                # other objects are stored in 'includes'
+                for incl in tweet['includes']:
+                    tweets_include[incl] = tweets_include[incl] + tweet['includes'][incl] \
+                        if incl in tweets_include else tweet['includes'][incl]
 
+        except KeyError:
+            pass
+        print(len(tweet['data']), ' tweets got collected!')
+        if (cnt % 3):
+            sleep(1)
+
+    tweet_all = merge_data_includes(tweets_data, tweets_include)
+    tweet_all.fillna('', inplace=True)
+
+    # save collected tweets
+    print('Total number of collected tweets',len(tweets_data))
+    print('Total number of tweets merged with other objects', len(tweet_all))
+    print('Number of columns: ', len(tweet_all.columns))
+
+    lst_tweet_all = tweet_all.to_dict('records')
+    chunklist = list(chunks(lst_tweet_all, results_per_file))
+    print('Number of files to be saved',len(chunklist))
+    save_list(chunklist, filename_prefix)
 
 if __name__ == '__main__':
     main()
