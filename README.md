@@ -90,10 +90,10 @@ git clone https://github.com/github_username/tweet_collector.git
 <!-- USAGE -->
 ## Usage
 
-- To collect the tweets of your interest, you will make use of the file [src/search_tweet.py](src/search_tweet.py).
+- To collect the tweets of your interest, you will make use of the file `sh search_tweet.sh`.
 Go to 'guidelines/Search_Tweets.ipynb' for more details.
 
-- To upload the collected tweets to elasticsearch and visualize it in kibana, you will make use of the file [src/load_elastic.py](src/load_elastic.py).
+- To upload the collected tweets to elasticsearch and visualize it in kibana, you will make use of the file `sh load_elastic.sh`.
 Go to 'guidelines/Elasticsearch_and_Kibana.ipynb' for more details.
   
 <!-- LINKS -->
@@ -124,4 +124,4 @@ Project Link: [https://github.com/UtrechtUniversity/tweet_collector](https://git
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
-* Special thanks to [Ton Smeele](A.P.M.smeele@uu.nl) from ITS team
+* Special thanks to [Ton Smeele](A.P.M.smeele@uu.nl) from Research IT team
