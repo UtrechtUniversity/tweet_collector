@@ -1,30 +1,20 @@
 """Load data into Elasticsearch"""
-
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 from elasticsearch import Elasticsearch, RequestsHttpConnection
 from elasticsearch.helpers import bulk
-
+from searchtweets import read_config
 
 def document_generator(fp):
     """JSON lines doc generator."""
-    if re.match('.*_[0-9].json', str(fp)):
-        print(f'Load {Path(fp).name}...')
-        with open(fp, "r") as f:
-            for line in f:
-                doc = json.loads(line)
-                yield {
-                    "_index": "twitter",
-                    "_source": doc
-                }
-    else:
-        print(f'Load all files named {Path(fp).stem}_x{Path(fp).suffix}...')
-        files = list(Path(fp).parent.glob(
-            f'{Path(fp).stem}*{Path(fp).suffix}'))
-        for file in files:
-            with open(file, "r") as f:
+    print(f'Load all files named {Path(fp).stem}_x{Path(fp).suffix}...')
+    files = list(Path(fp).parent.glob(f'{Path(fp).stem}*{".json"}'))
+    for file in files:
+        print(file)
+        with open(file, "r") as f:
                 for line in f:
                     doc = json.loads(line)
                     yield {
@@ -57,14 +47,35 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Load tweet file into ElasticSearch.'
     )
-    parser.add_argument('--input_fp', type=str, help='source file')
+    parser.add_argument('--input_fp', type=str, help='source file', default='')
     parser.add_argument('--mapping_fp',
                         type=str,
                         default= "mapping_twitter_tweet.json",
                         help='map file')
+    parser.add_argument("--config-file",
+                           dest="config_filename",
+                           default="config/api_config.config",
+                           help="""configuration file with all parameters.""")
+
     args = parser.parse_args()
+
+
+    configfile_dict = read_config(args.config_filename)
+
+
+    '''upload data from filename_prefix in config file to elastic '''
+    '''if filename_prefix is not provided, then upload data from input_fp'''
+    fp=''
+    if configfile_dict.get("filename_prefix") is not None:
+        fp = configfile_dict.get("filename_prefix")+'.json'
+    else:
+        fp = args.input_fp
+
+    if fp=='':
+        print('No input file is provided')
+        sys.exit(1)
 
     # setup Elasticsearch client
     es = Elasticsearch()
 
-    load_data_elasticsearch(es, args.input_fp, args.mapping_fp)
+    load_data_elasticsearch(es, fp, args.mapping_fp)
