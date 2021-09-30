@@ -20,7 +20,7 @@ def parse_cmd_args():
 
     argparser.add_argument("--credential-file",
                            dest="credential_file",
-                           default=None,
+                           default="config/.twitter_keys.yaml",
                            help=("Location of the yaml file used to hold "
                                  "your credentials."))
 
@@ -33,7 +33,7 @@ def parse_cmd_args():
 
     argparser.add_argument("--config-file",
                            dest="config_filename",
-                           default=None,
+                           default="config/api_config.config",
                            help="""configuration file with all parameters.""")
 
     return argparser
@@ -49,7 +49,7 @@ def main():
         print('configfile_dict is empty', configfile_dict)
         sys.exit(1)
     filename_prefix = configfile_dict.get("filename_prefix") \
-        if configfile_dict.get("filename_prefix") is not None else 'tweets'
+        if configfile_dict.get("filename_prefix") is not None else 'output/tweets'
     results_per_file = int(configfile_dict.get("results_per_file")) \
         if configfile_dict.get("results_per_file") is not None else 10000
 
