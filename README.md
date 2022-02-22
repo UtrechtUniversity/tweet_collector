@@ -58,7 +58,7 @@ The followings are the main steps.
 1. Apply for Academic Research product track
 2. Setup the environment
 3. Search tweets
-4. Visualize tweets.
+4. Visualize tweets
 
 Each step is elaborted in details in **guideline** folder.
 
