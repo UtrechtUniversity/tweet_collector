@@ -16,7 +16,6 @@ PyYAML = "^5.4.1"
 elasticsearch = "^7.14.0"
 ipykernel = "^6.4.1"
 
-
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 autopep8 = "^1.5.7"
