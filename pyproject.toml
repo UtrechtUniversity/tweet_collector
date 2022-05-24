@@ -17,8 +17,8 @@ elasticsearch = "^7.14.0"
 ipykernel = "^6.4.1"
 
 [tool.poetry.scripts]
-tweet-collector="tweet_collector.search_tweet:main"
-tweet-collector-elastic="tweet_collector.load_elastic:main"
+tweet_collector="tweet_collector.search_tweet:main"
+tweet_collector_elastic="tweet_collector.load_elastic:main"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
