@@ -8,7 +8,8 @@ __pycache__/
 
 # tweet_collector
 output/
-config/
+config/*.yaml
+config/*.config
 .DS_Store
 */.DS_Store
 
