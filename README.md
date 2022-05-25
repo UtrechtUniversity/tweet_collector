@@ -80,7 +80,7 @@ git clone https://github.com/github_username/tweet_collector.git
 1. (Optional but recommended) Create and activate a virtual environment
 1. Create package file:
 ```
-poetry package
+poetry build
 ```
 1. Install package through pip:
 ```
