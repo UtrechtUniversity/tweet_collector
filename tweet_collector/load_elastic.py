@@ -41,9 +41,7 @@ def load_data_elasticsearch(es, fp, mapping_fp, verbose=False):
         print("The mapping of twitter:")
         print(es.indices.get_mapping(index='twitter'))
 
-
-if __name__ == '__main__':
-
+def main():
     parser = argparse.ArgumentParser(
         description='Load tweet file into ElasticSearch.'
     )
@@ -79,3 +77,7 @@ if __name__ == '__main__':
     es = Elasticsearch()
 
     load_data_elasticsearch(es, fp, args.mapping_fp)
+
+
+if __name__ == '__main__':
+    main()

@@ -1,7 +1,7 @@
 import argparse
 import sys
 from os import environ
-from tweet_utils import *
+from tweet_collector.tweet_utils import *
 from time import sleep
 
 # https://github.com/twitterdev/search-tweets-python/tree/v2
