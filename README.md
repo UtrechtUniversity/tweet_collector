@@ -73,23 +73,28 @@ Each step is elaborted in details in **guideline** folder.
 
 To get a local copy up and running follow these simple steps.
 
-1. Clone the repo
+1. Clone the repo:
 ```sh
 git clone https://github.com/github_username/tweet_collector.git
 ```
-2. Install the package dependencies
-   1. If you have poetry 
-    ```sh
-    poetry install 
-    ```
-   2. If you have only pip
-   ```sh
-   pip install -r requirement.txt
-   ```
+1. (Optional but recommended) Create and activate a virtual environment
+1. Create package file:
+```
+poetry build
+```
+1. Install package through pip:
+```
+pip install ./dist/tweet_collector_version.whl
+```
 
 <!-- USAGE -->
 ## Usage
+If the installation through pip was followed:
+1. Make sure you are inside the virtual environment tweet_collector was installed in
+1. Run the `tweet_collector` command to start collecting the tweets
+1. Run the `tweet_collector_elastic` command to visualise the results in Kibana.
 
+Alternatively, you can launch the files directly through the supplies shell scripts:
 - To collect the tweets of your interest, you will make use of the file `sh search_tweet.sh`.
 Go to 'guidelines/Search_Tweets.ipynb' for more details.
 
