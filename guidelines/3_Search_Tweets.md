@@ -4,18 +4,13 @@ Twitter forms a rich source of information for researchers interested in studyin
 
 ## Quick start
 - Navigate to the `tweet_collector` directory. In ResearchCloud you should go to `File System/opt/tweet_collector`.
-- If you are using ResearchCloud, you should copy `tweet_collector/config` in a desired directory.
 - Go to `config` directory and select `View/ show hidden files` to show hidden files. 
 - Remove  `.TEMPLATE` from the extension of `.twitter_keys.yaml` and `api_config.config`.
 - Open `.twitter_keys.yaml` and add your credentials in `consumer_key`, `consumer_secret` and `bearer_token`
 - Open `api_config.config` and fill in your search query. For more details go to `Configuration file` in `Settings` section.
-- Open a terminal and navigate to `tweet_collector` or your desired directory in ResearchCloud. 
+- Open a terminal and navigate to `tweet_collector`. In ResearchCloud you should type `cd ../../opt/tweet_collector`. 
 - If you run the application locally, make sure you activate the virtual environment that you setup for tweet_collector.
-- Run the `tweet_collector` command to start collecting the tweets. In ResearchCloud you need to provide your config directory.
-```
-tweet_collector --credential-file [tweet_collector or your desired directory on ResearchCloud]/config/.twitter_keys.yaml --config-file [tweet_collector or your desired directory on ResearchCloud]/config/api_config.config
-
-```
+- Run the `tweet_collector` command to start collecting the tweets.
 
 **Notes**
 To find more details read the `Settings` section.

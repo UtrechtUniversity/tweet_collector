@@ -16,17 +16,12 @@ docker-compose up -d
 If the process is done completely, you should find home page of elasitc in http://localhost:5601 
 
 ## 2. Load data
-To upload your data into Elastic, you need to run the following code in your terminal:
-
-```
-cd tweet_collector
-sh load_elastic.sh
-```
+To upload your data into Elastic, run the `tweet_collector_elastic`.
 
 **Note:** This script uploads all the json files starting with `filename_prefix`  mentioned in `config/api_config.config`.
 
 
-For example, considering `guidelines/example/api_config.config`, all files in 'output/happiness[x].json will be uploaded to elasticsearch.
+For example, considering `config/api_config.config.TEMPLATE`, all files in 'output/happiness[x].json will be uploaded to elasticsearch.
 
 ## 3. Kibana
 ### Adding data in Kibana
