@@ -68,21 +68,25 @@ Each step is elaborted in details in **guideline** folder.
 
   - Python 3.8
   - Docker desktop
-* Skip this section if you are using a pre-installed workspace of Surfsara ResearchCloud. For more details go to  **guideline/Setup_Env.ipynb** .  
+
 ### Installation
 
 To get a local copy up and running follow these simple steps.
 
 1. Clone the repo:
 ```sh
-git clone https://github.com/github_username/tweet_collector.git
+git clone https://github.com/UtrechtUniversity/tweet_collector.git
 ```
-1. (Optional but recommended) Create and activate a virtual environment
-1. Create package file:
+2. (Optional but recommended) Create and activate a virtual environment
+```
+   python -m venv [myenvname]
+   source [myenvname]/bin/activate
+```
+3. Create package file:
 ```
 poetry build
 ```
-1. Install package through pip:
+4. Install package through pip:
 ```
 pip install ./dist/tweet_collector_version.whl
 ```
@@ -94,13 +98,6 @@ If the installation through pip was followed:
 1. Run the `tweet_collector` command to start collecting the tweets
 1. Run the `tweet_collector_elastic` command to visualise the results in Kibana.
 
-Alternatively, you can launch the files directly through the supplies shell scripts:
-- To collect the tweets of your interest, you will make use of the file `sh search_tweet.sh`.
-Go to 'guidelines/Search_Tweets.ipynb' for more details.
-
-- To upload the collected tweets to elasticsearch and visualize it in kibana, you will make use of the file `sh load_elastic.sh`.
-Go to 'guidelines/Elasticsearch_and_Kibana.ipynb' for more details.
-  
 <!-- LINKS -->
 ## Links
 
@@ -130,3 +127,5 @@ Project Link: [https://github.com/UtrechtUniversity/tweet_collector](https://git
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 * Special thanks to [Ton Smeele](A.P.M.smeele@uu.nl) from Research IT team
+* Special thanks to [Sytse Groenwold](s.groenwold@uu.nl) from Research IT team
+
