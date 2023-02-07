@@ -3,6 +3,7 @@ from multiprocessing import Pool
 import json
 from pathlib import Path
 import psutil
+from ast import literal_eval
 
 
 def chunks(lst, n):
@@ -44,6 +45,7 @@ def merge_data_includes(tweets_data, tweets_include):
     """
         Merges tweet object with other objects, i.e. media, places, users etc
     """
+
     df_tweets_tmp = pd.DataFrame(tweets_data)
 
     # Add key-values of a nested dictionary in df_tweets_tmp as new columns
@@ -61,6 +63,17 @@ def merge_data_includes(tweets_data, tweets_include):
         if incl == 'users':
             df_tweets = pd.merge(df_tweets, df_incl, how='left', left_on=['author_id'], right_on=['id'],
                                  suffixes=[None,'_users'])
+        if incl == 'tweets':
+            # extract nested referenced_tweet id
+            df_tweets['referenced_tweet_lst'] = df_tweets['referenced_tweets'].\
+                apply(lambda x: x[0] if type(x) == list else {})
+
+            df_ref = pd.DataFrame(df_tweets['referenced_tweet_lst'].to_dict()).T
+            df_ref.columns = ['referenced_tweet_type', 'referenced_tweet_id']
+            df_tweets = pd.concat([df_tweets.drop(['referenced_tweet_lst'], axis=1), df_ref], axis=1)
+            df_tweets = pd.merge(df_tweets, df_incl, how='left', left_on=['referenced_tweet_id'],
+                                 right_on=['id'], suffixes=[None, '_ref_tweet'])
+
     return df_tweets
 
 
