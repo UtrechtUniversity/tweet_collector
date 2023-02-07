@@ -3,7 +3,6 @@ from multiprocessing import Pool
 import json
 from pathlib import Path
 import psutil
-from ast import literal_eval
 
 
 def chunks(lst, n):
