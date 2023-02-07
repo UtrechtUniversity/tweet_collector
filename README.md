@@ -83,13 +83,19 @@ git clone https://github.com/UtrechtUniversity/tweet_collector.git
    source [myenvname]/bin/activate
 ```
 3. Create package file:
+
+Navigate to tweet_collector folder and run:
+
 ```
 poetry build
 ```
+
 4. Install package through pip:
 ```
-pip install ./dist/tweet_collector_version.whl
+pip install ./dist/[tweet_collector_version.whl]
 ```
+
+Note: you should run it for the version you have in your dist folder.
 
 <!-- USAGE -->
 ## Usage
