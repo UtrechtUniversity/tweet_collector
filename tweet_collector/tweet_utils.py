@@ -49,19 +49,24 @@ def merge_data_includes(tweets_data, tweets_include):
 
     # Add key-values of a nested dictionary in df_tweets_tmp as new columns
     df_tweets = flat_dict(df_tweets_tmp)
+
     for incl in tweets_include:
         df_incl = pd.DataFrame(tweets_include[incl])
         if incl == 'media':
             # Split each row to multiple rows for each item in media_keys list
+            df_incl = df_incl.drop_duplicates(subset=['media_key'])
             df_tweets = df_tweets.explode('media_keys')
             df_tweets = pd.merge(df_tweets, df_incl, how='left', left_on=['media_keys'], right_on=['media_key'],
                                  suffixes=[None,'_media'])
         if incl == 'places':
+            df_incl = df_incl.drop_duplicates(subset=['id'])
             df_tweets = pd.merge(df_tweets, df_incl, how='left', left_on=['place_id'], right_on=['id'],
                                  suffixes=[None,'_places'])
         if incl == 'users':
+            df_incl = df_incl.drop_duplicates(subset=['id'])
             df_tweets = pd.merge(df_tweets, df_incl, how='left', left_on=['author_id'], right_on=['id'],
                                  suffixes=[None,'_users'])
+
         if incl == 'tweets':
             # extract nested referenced_tweet id
             df_tweets['referenced_tweet_lst'] = df_tweets['referenced_tweets'].\
@@ -70,6 +75,8 @@ def merge_data_includes(tweets_data, tweets_include):
             df_ref = pd.DataFrame(df_tweets['referenced_tweet_lst'].to_dict()).T
             df_ref.columns = ['referenced_tweet_type', 'referenced_tweet_id']
             df_tweets = pd.concat([df_tweets.drop(['referenced_tweet_lst'], axis=1), df_ref], axis=1)
+
+            df_incl = df_incl.drop_duplicates(subset=['id'])
             df_tweets = pd.merge(df_tweets, df_incl, how='left', left_on=['referenced_tweet_id'],
                                  right_on=['id'], suffixes=[None, '_ref_tweet'])
 
